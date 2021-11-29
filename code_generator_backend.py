@@ -1,10 +1,13 @@
 from typing import List
+
+
 class CodeGeneratorBackend:
     """
     Class makes it easy to generate a python file and handle spacing
     Source: https://stackoverflow.com/questions/1364640/python-generating-python
     """
-    def __init__(self, tab: str="\t") -> None:
+
+    def __init__(self, tab: str = "\t") -> None:
         self.code = []
         self.tab = tab
         self.level = 0
@@ -36,7 +39,7 @@ class DataclassGenerator:
     Class to generate data classes for python from arbitrary data structures
     """
 
-    def __init__(self, python_object: dict, class_name: str, class_description: str=""):
+    def __init__(self, python_object: dict, class_name: str, class_description: str = "", parent_class: bool = False):
         """
         :param python_object: arbitrary python data structure such as a dict or list
         :param class_name: name of the data class to be generated
@@ -44,6 +47,7 @@ class DataclassGenerator:
         self.python_object = python_object
         self.class_name = class_name
         self.class_description = class_description
+        self.parent_class = parent_class
 
     def generate_full_dataclass_file_str(self) -> str:
         """
@@ -52,7 +56,23 @@ class DataclassGenerator:
         """
         raise NotImplementedError
 
-    def generate_dataclass_str(self) -> str:
+    def generate_parent_class_str(self) -> str:
+        classes: List[DataclassGenerator] = []
+        type_overrides = {}
+        for key, values in self.python_object.items():
+            if type(values) == list and values:
+                first_item = values[0]
+                new_class_generator = DataclassGenerator(python_object=first_item, class_name=key.capitalize(), parent_class=False)
+                classes.append(new_class_generator)
+                type_overrides[key] = f"List[{key.capitalize()}]"
+        result_str = self.generate_dataclass_str(type_overrides=type_overrides) + "\n\n"
+        for generator in classes:
+            data_class_str = generator.generate_dataclass_str()
+            result_str += data_class_str
+            result_str += "\n"
+        return result_str
+
+    def generate_dataclass_str(self, type_overrides: dict = None) -> str:
         """
         Generates just the data class part of the str for the full thing. Ex:
         @dataclass
@@ -66,6 +86,8 @@ class DataclassGenerator:
             stageKeys: List[str]
             tags: Dict[str, str]
         """
+        if not type_overrides:
+            type_overrides = {}
         codegenerator = CodeGeneratorBackend()
         codegenerator.write("@dataclass")
         codegenerator.write(f"class {self.class_name}:")
@@ -75,8 +97,11 @@ class DataclassGenerator:
             codegenerator.write(f'{self.class_description}')
             codegenerator.write('"""')
         for field_name, value in self.python_object.items():
-            val_type = DataclassGenerator.python_type_dataclass_type_converter(value)
-            new_line = f"{field_name}: {val_type}"
+            if field_name in type_overrides:
+                new_line = f"f{field_name}: {type_overrides[field_name]}"
+            else:
+                val_type = DataclassGenerator.python_type_dataclass_type_converter(value)
+                new_line = f"{field_name}: {val_type}"
             codegenerator.write(new_line)
         return codegenerator.create_code_string()
 
@@ -114,7 +139,7 @@ class DataclassGenerator:
             return DataclassGenerator.generic_type_converter(obj)
 
     @staticmethod
-    def generate_list_type_str(list_obj: list, list_types_cutoff: int=3) -> str:
+    def generate_list_type_str(list_obj: list, list_types_cutoff: int = 3) -> str:
         """
         Generates list type
         :param list_obj:
@@ -197,11 +222,13 @@ class DataclassGenerator:
     @staticmethod
     def generic_type_converter(obj: object) -> str:
         type_str = str(type(obj))
-        type_str = type_str.replace("<", "").replace(">","").replace("class", "").replace("'", "").replace(" ","")
+        type_str = type_str.replace("<", "").replace(">", "").replace("class", "").replace("'", "").replace(" ", "")
         return type_str
+
 
 if __name__ == '__main__':
     from datetime import datetime
+
     test_api_gateway_response = {
         'id': 'string',
         'value': 'string',

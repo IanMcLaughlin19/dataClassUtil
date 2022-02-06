@@ -39,7 +39,12 @@ class DataclassGenerator:
     Class to generate data classes for python from arbitrary data structures
     """
 
-    def __init__(self, python_object: dict, class_name: str, class_description: str = "", parent_class: bool = False):
+    def __init__(self,
+                 python_object: dict,
+                 class_name: str,
+                 class_description: str = "",
+                 parent_class: bool = False,
+                 add_defaults: bool=False):
         """
         :param python_object: arbitrary python data structure such as a dict or list
         :param class_name: name of the data class to be generated
@@ -48,6 +53,7 @@ class DataclassGenerator:
         self.class_name = class_name
         self.class_description = class_description
         self.parent_class = parent_class
+        self.add_defaults = add_defaults
 
     def generate_full_dataclass_file_str(self) -> str:
         """
@@ -60,16 +66,28 @@ class DataclassGenerator:
         classes: List[DataclassGenerator] = []
         type_overrides = {}
         for key, values in self.python_object.items():
+            class_name = self.dash_case_to_camel(key)
+
             if type(values) == list and values:
                 first_item = values[0]
-                new_class_generator = DataclassGenerator(python_object=first_item, class_name=key.capitalize(), parent_class=False)
+                new_class_generator = DataclassGenerator(python_object=first_item, class_name=class_name,
+                                                         parent_class=False, add_defaults=self.add_defaults)
                 classes.append(new_class_generator)
-                type_overrides[key] = f"List[{key.capitalize()}]"
+                type_overrides[key] = f"List[{class_name}]"
+
+            elif type(values) == dict and values:
+                new_class_generator = DataclassGenerator(python_object=values, class_name=class_name,
+                                                         parent_class=False, add_defaults=self.add_defaults)
+                classes.append(new_class_generator)
+                type_overrides[key] = class_name
+
         result_str = self.generate_dataclass_str(type_overrides=type_overrides) + "\n\n"
+
         for generator in classes:
             data_class_str = generator.generate_dataclass_str()
-            result_str += data_class_str
-            result_str += "\n"
+            result_str = data_class_str + result_str
+            result_str += "\n\n"
+
         return result_str
 
     def generate_dataclass_str(self, type_overrides: dict = None) -> str:
@@ -88,22 +106,49 @@ class DataclassGenerator:
         """
         if not type_overrides:
             type_overrides = {}
+
         codegenerator = CodeGeneratorBackend()
-        codegenerator.write("@dataclass")
+        codegenerator.write("\n\n@dataclass")
         codegenerator.write(f"class {self.class_name}:")
         codegenerator.indent()
+
         if self.class_description:
             codegenerator.write('"""')
             codegenerator.write(f'{self.class_description}')
             codegenerator.write('"""')
+
+        classes: List[DataclassGenerator] = []
         for field_name, value in self.python_object.items():
+            clean_field_name = field_name.replace("-", "_")
+            class_name = self.dash_case_to_camel(field_name)
             if field_name in type_overrides:
-                new_line = f"f{field_name}: {type_overrides[field_name]}"
+                new_line = f"{clean_field_name}: {type_overrides[field_name]}"
+            # elif type(value) == list and value:
+            #     first_item = value[0]
+            #     new_class_generator = DataclassGenerator(python_object=first_item,
+            #                                              class_name=class_name, add_defaults=self.add_defaults)
+            #     new_line = f"{clean_field_name}: {class_name}"
+            #     classes.append(new_class_generator)
+            elif type(value) == dict and value:
+                new_class_generator = DataclassGenerator(python_object=value, class_name=class_name,
+                                                         add_defaults=self.add_defaults)
+                new_line = f"{clean_field_name}: {class_name}"
+                classes.append(new_class_generator)
             else:
                 val_type = DataclassGenerator.python_type_dataclass_type_converter(value)
-                new_line = f"{field_name}: {val_type}"
+                new_line = f"{clean_field_name}: {val_type}"
+                if self.add_defaults:
+                    new_line += DataclassGenerator.get_default_factory_string_for_type(value)
             codegenerator.write(new_line)
-        return codegenerator.create_code_string()
+
+        data_class_str = codegenerator.create_code_string()
+
+        for generator in classes:
+            new_data_class = generator.generate_dataclass_str()
+            data_class_str = new_data_class + data_class_str
+
+
+        return data_class_str
 
     def generate_imports_str(self) -> str:
         """
@@ -114,6 +159,28 @@ class DataclassGenerator:
         :return: str in above format
         """
         raise NotImplementedError
+
+    @staticmethod
+    def get_default_factory_string_for_type(value: object) -> str:
+        """
+        This function produces a default factory string for the type. This enables the option for allowing default values
+        in data classes, this is useful for when you're not sure if every field will be used.
+        :param value: any python object
+        :return: valid default factory string i.e. ` = field(default_factory=list)` if given a list object
+        """
+        obj_type = DataclassGenerator.generic_type_converter(value)
+        full_string = f" = field(default_factory={obj_type})"
+        return full_string
+
+    @staticmethod
+    def simple_python_obj_to_type_string(obj: object) -> str:
+        """
+        This funciton just does very simple type -> string conversion. i.e. type(list) -> list instead of the more
+        involved function below
+        :param obj: any python object... Will default to a
+        :return:
+        """
+        pass
 
     @staticmethod
     def python_type_dataclass_type_converter(obj: object) -> str:
@@ -212,7 +279,7 @@ class DataclassGenerator:
             base_val_string = "Any"
         else:
             base_val_string = ""
-            for tp, i in enumerate(val_types):
+            for i, tp in enumerate(val_types):
                 base_val_string += tp
                 if i != len(val_types) - 1:
                     base_val_string += ","
@@ -225,25 +292,21 @@ class DataclassGenerator:
         type_str = type_str.replace("<", "").replace(">", "").replace("class", "").replace("'", "").replace(" ", "")
         return type_str
 
+    @staticmethod
+    def dash_case_to_camel(snake_str: str) -> str:
+        result = ""
+        next_cap = False
+        for i, letter in enumerate(snake_str):
+            if i == 0 or next_cap:
+                result += letter.capitalize()
+                next_cap = False
+            elif letter == "-":
+                next_cap = True
+                continue
+            else:
+                result += letter
+        return result
 
-if __name__ == '__main__':
-    from datetime import datetime
 
-    test_api_gateway_response = {
-        'id': 'string',
-        'value': 'string',
-        'name': 'string',
-        'customerId': 'string',
-        'description': 'string',
-        'enabled': True | False,
-        'createdDate': datetime(2015, 1, 1),
-        'lastUpdatedDate': datetime(2015, 1, 1),
-        'stageKeys': [
-            'string',
-        ],
-        'tags': {
-            'string': 'string'
-        }
-    }
-    test_string = DataclassGenerator(python_object=test_api_gateway_response, class_name="TestClass")
-    print(test_string.generate_dataclass_str())
+
+

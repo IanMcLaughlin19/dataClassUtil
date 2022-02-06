@@ -1,0 +1,40 @@
+{
+    "attachments": [
+        {
+            "id": "de39a167-fad5-442d-bf0e-bcbed350ecab",
+            "type": "ElasticNetworkInterface",
+            "status": "ATTACHED",
+            "details": [
+                {
+                    "name": "subnetId",
+                    "value": "subnet-344c8b15"
+                },
+                {
+                    "name": "networkInterfaceId",
+                    "value": "eni-0fe44b12ffa8dc08b"
+                },
+                {
+                    "name": "macAddress",
+                    "value": "12:e0:e5:65:2a:25"
+                },
+                {
+                    "name": "privateDnsName",
+                    "value": "ip-172-31-82-14.ec2.internal"
+                },
+                {
+                    "name": "privateIPv4Address",
+                    "value": "172.31.82.14"
+                }
+            ]
+        }
+    ],
+    "attributes": [
+        {
+            "name": "ecs.cpu-architecture",
+            "value": "x86_64"
+        }
+    ],
+    "availabilityZone": "us-east-1c",
+    "clusterArn": "arn:aws:ecs:us-east-1:843227719026:cluster/StreamingClusterCluster",
+    "connectivity": "CONNECTED",
+    "connectivityAt": 

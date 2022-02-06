@@ -15,5 +15,14 @@
             "defaultCapacityProviderStrategy": []
         }
     ],
-    "failures": []
+    "failures": [{
+        "clusterArn": "example-cluster",
+        "clusterName": "example-cluster-name",
+        "status": "ACTIVE",
+        "registeredContainerInstancesCount": 9,
+        "runningTasksCount": 43,
+        "pendingTasksCount": 0,
+        "activeServicesCount": 27,
+        "statistics": []}
+        ]
 }

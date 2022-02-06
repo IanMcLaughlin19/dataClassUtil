@@ -1,0 +1,191 @@
+{
+  "genesis-hash": "string",
+  "genesis-id": "string",
+  "previous-block-hash": "string",
+  "rewards": {
+    "fee-sink": "string",
+    "rewards-calculation-round": 0,
+    "rewards-level": 0,
+    "rewards-pool": "string",
+    "rewards-rate": 0,
+    "rewards-residue": 0
+  },
+  "round": 0,
+  "seed": "string",
+  "timestamp": 0,
+  "transactions": [
+    {
+      "application-transaction": {
+        "application-id": 0,
+        "on-completion": "noop",
+        "application-args": [
+          "string"
+        ],
+        "accounts": [
+          "string"
+        ],
+        "foreign-apps": [
+          0
+        ],
+        "foreign-assets": [
+          0
+        ],
+        "local-state-schema": {
+          "num-uint": 0,
+          "num-byte-slice": 0
+        },
+        "global-state-schema": {
+          "num-uint": 0,
+          "num-byte-slice": 0
+        },
+        "approval-program": "string",
+        "clear-state-program": "string",
+        "extra-program-pages": 0
+      },
+      "asset-config-transaction": {
+        "asset-id": 0,
+        "params": {
+          "clawback": "string",
+          "creator": "string",
+          "decimals": 19,
+          "default-frozen": true,
+          "freeze": "string",
+          "manager": "string",
+          "metadata-hash": "string",
+          "name": "string",
+          "name-b64": "string",
+          "reserve": "string",
+          "total": 0,
+          "unit-name": "string",
+          "unit-name-b64": "string",
+          "url": "string",
+          "url-b64": "string"
+        }
+      },
+      "asset-freeze-transaction": {
+        "address": "string",
+        "asset-id": 0,
+        "new-freeze-status": true
+      },
+      "asset-transfer-transaction": {
+        "amount": 0,
+        "asset-id": 0,
+        "close-amount": 0,
+        "close-to": "string",
+        "receiver": "string",
+        "sender": "string"
+      },
+      "auth-addr": "string",
+      "close-rewards": 0,
+      "closing-amount": 0,
+      "confirmed-round": 0,
+      "created-application-index": 0,
+      "created-asset-index": 0,
+      "fee": 0,
+      "first-valid": 0,
+      "genesis-hash": "string",
+      "genesis-id": "string",
+      "group": "string",
+      "id": "string",
+      "intra-round-offset": 0,
+      "keyreg-transaction": {
+        "non-participation": true,
+        "selection-participation-key": "string",
+        "vote-first-valid": 0,
+        "vote-key-dilution": 0,
+        "vote-last-valid": 0,
+        "vote-participation-key": "string"
+      },
+      "last-valid": 0,
+      "lease": "string",
+      "note": "string",
+      "payment-transaction": {
+        "amount": 0,
+        "close-amount": 0,
+        "close-remainder-to": "string",
+        "receiver": "string"
+      },
+      "receiver-rewards": 0,
+      "rekey-to": "string",
+      "round-time": 0,
+      "sender": "string",
+      "sender-rewards": 0,
+      "signature": {
+        "logicsig": {
+          "args": [
+            "string"
+          ],
+          "logic": "string",
+          "multisig-signature": {
+            "subsignature": [
+              {
+                "public-key": "string",
+                "signature": "string"
+              }
+            ],
+            "threshold": 0,
+            "version": 0
+          },
+          "signature": "string"
+        },
+        "multisig": {
+          "subsignature": [
+            {
+              "public-key": "string",
+              "signature": "string"
+            }
+          ],
+          "threshold": 0,
+          "version": 0
+        },
+        "sig": "string"
+      },
+      "tx-type": "pay",
+      "local-state-delta": [
+        {
+          "address": "string",
+          "delta": [
+            {
+              "key": "string",
+              "value": {
+                "action": 0,
+                "bytes": "string",
+                "uint": 0
+              }
+            }
+          ]
+        }
+      ],
+      "global-state-delta": [
+        {
+          "key": "string",
+          "value": {
+            "action": 0,
+            "bytes": "string",
+            "uint": 0
+          }
+        }
+      ],
+      "logs": [
+        "string"
+      ],
+      "inner-txns": [
+        "string"
+      ]
+    }
+  ],
+  "transactions-root": "string",
+  "txn-counter": 0,
+  "upgrade-state": {
+    "current-protocol": "string",
+    "next-protocol": "string",
+    "next-protocol-approvals": 0,
+    "next-protocol-switch-on": 0,
+    "next-protocol-vote-before": 0
+  },
+  "upgrade-vote": {
+    "upgrade-approve": true,
+    "upgrade-delay": 0,
+    "upgrade-propose": "string"
+  }
+}

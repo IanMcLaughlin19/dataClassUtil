@@ -1,6 +1,7 @@
 import argparse
 import json
 from code_generator_backend import DataclassGenerator
+
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", help="Provide a json file to make into a dataclass")

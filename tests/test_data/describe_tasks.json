@@ -26,7 +26,7 @@
             "capacityProviderName": "string",
             "clusterArn": "string",
             "connectivity": "CONNECTED"|"DISCONNECTED",
-            "connectivityAt": datetime(2015, 1, 1),
+            "connectivityAt": "datetime(2015, 1, 1)",
             "containerInstanceArn": "string",
             "containers": [
                 {

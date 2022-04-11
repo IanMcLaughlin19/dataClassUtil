@@ -25,7 +25,7 @@ we get a complex output:
 The code output is below:  
 
 ```python
-from dataclass import dataclass, field
+from dataclasses import dataclass, field
 
 @dataclass
 class UpgradeVote:

@@ -10,9 +10,9 @@
                         {
                             "name": "string",
                             "value": "string"
-                        },
+                        }
                     ]
-                },
+                }
             ],
             "attributes": [
                 {
@@ -20,7 +20,7 @@
                     "value": "string",
                     "targetType": "container-instance",
                     "targetId": "string"
-                },
+                }
             ],
             "availabilityZone": "string",
             "capacityProviderName": "string",
@@ -57,7 +57,7 @@
                     "healthStatus": "HEALTHY"|"UNHEALTHY"|"UNKNOWN",
                     "managedAgents": [
                         {
-                            "lastStartedAt": datetime(2015, 1, 1),
+                            "lastStartedAt": "datetime(2015, 1, 1)",
                             "name": "ExecuteCommandAgent",
                             "reason": "string",
                             "lastStatus": "string"
@@ -72,10 +72,10 @@
                 },
             ],
             "cpu": "string",
-            "createdAt": datetime(2015, 1, 1),
+            "createdAt": "datetime(2015, 1, 1)",
             "desiredStatus": "string",
-            "enableExecuteCommand": True|False,
-            "executionStoppedAt": datetime(2015, 1, 1),
+            "enableExecuteCommand": true,
+            "executionStoppedAt": "datetime(2015, 1, 1)",
             "group": "string",
             "healthStatus": "HEALTHY"|"UNHEALTHY"|"UNKNOWN",
             "inferenceAccelerators": [
@@ -133,14 +133,14 @@
             },
             "platformVersion": "string",
             "platformFamily": "string",
-            "pullStartedAt": datetime(2015, 1, 1),
-            "pullStoppedAt": datetime(2015, 1, 1),
-            "startedAt": datetime(2015, 1, 1),
+            "pullStartedAt": "datetime(2015, 1, 1)",
+            "pullStoppedAt": "datetime(2015, 1, 1)",
+            "startedAt": "datetime(2015, 1, 1)",
             "startedBy": "string",
             "stopCode": "TaskFailedToStart"|"EssentialContainerExited"|"UserInitiated",
-            "stoppedAt": datetime(2015, 1, 1),
+            "stoppedAt": "datetime(2015, 1, 1)",
             "stoppedReason": "string",
-            "stoppingAt": datetime(2015, 1, 1),
+            "stoppingAt": "datetime(2015, 1, 1)",
             "tags": [
                 {
                     "key": "string",

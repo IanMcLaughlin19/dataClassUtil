@@ -1,0 +1,4 @@
+ebmlite==3.3.0
+idelib==3.2.4
+numpy==1.22.3
+tk==0.1.0

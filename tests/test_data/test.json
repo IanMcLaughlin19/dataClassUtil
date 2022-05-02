@@ -1,0 +1,11 @@
+{   "application_transaction": "test",
+    "close_rewards": 0,
+    "closing_amount": 0,
+    "confirmed_round": 20330180,
+    "fee": 1000,
+    "first_valid": 20330176,
+    "genesis_hash": "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
+    "genesis_id": "mainnet-v1.0",
+    "group": "P3G/1RWtsvDlSivdPg0y9Bsa51a+LYqmp2Oj9xFORBQ=",
+    "id": "PRYG5NCMHKJ67YED7PPBRRIN5IH4BMFSW6EDXFY4J7SAJDXMZUZQ"
+}

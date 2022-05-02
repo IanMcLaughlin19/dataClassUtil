@@ -209,6 +209,13 @@ You can then use the generated classes to write strongly typed code and use IDE 
 In practice this isn't fully functional and you need to hack around the limitations of Python a bit so that they instantiate
 properly, but the code generation is a start. 
 
+### Version 2:
+* Going to add the subclass part to the tool so that it can actually be used properly
+* Going to put it behind a lambda function
+* Going to make a react app front end hopefully
+* Add some devops like github actions 
+* Add docker for backend too 
+
 ### TODO:
 This was really just a personal tool, some work still to be done:
 * Make this more useable, the generated classes are don't instantiate without some hacking. This is done in practice in

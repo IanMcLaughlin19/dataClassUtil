@@ -23,7 +23,9 @@ def main() -> None:
     elif args.print:
         print(generator.generate_dataclass_str())
 
+
 if __name__ == '__main__':
+
     main()
 
 

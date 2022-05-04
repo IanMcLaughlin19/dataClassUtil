@@ -84,9 +84,6 @@ class SubClass:
             print("class that caused issue", cls)
             print("data struct that caused issue")
             pprint.pprint(e)
-            pprint.pprint(new_dict)
-        
-
-        """
+            pprint.pprint(new_dict)"""
         actual_output = req_lambda.json()['text']
         self.assertEqual(expected_output, actual_output)

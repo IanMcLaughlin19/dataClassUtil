@@ -19,6 +19,10 @@ def lambda_handler(event, context):
         print(f"result: /n {dataclass_string}")
         return {
             'statusCode': 200,
+            'headers': {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+            },
             'body': json.dumps({"text": dataclass_string})
         }
     except Exception as e:

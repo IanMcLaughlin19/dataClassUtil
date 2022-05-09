@@ -2,6 +2,7 @@ version: 0.2
 env:
   variables:
     S3_BUCKET_NAME: "dataclass-tool-lambda-s3bucket-7mc6wggd07uu"
+
 phases:
   install:
     runtime-versions:

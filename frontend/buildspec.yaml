@@ -8,7 +8,7 @@ phases:
       nodejs: 14
   pre_build:
     commands:
-      - cd frontEnd
+      - cd frontend
       - echo $S3_BUCKET_NAME
       - echo Installing source NPM dependencies...
       - npm install

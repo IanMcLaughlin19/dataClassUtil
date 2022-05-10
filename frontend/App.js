@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-          <h1>JSON 2 Python Data Classes</h1>
+          <h1>JSON 2 Python Data Classes FUCKKKKKKKK</h1>
       </header>
         <h2>
             <p className="paragraph">

@@ -25,6 +25,22 @@ export default class TextEditor extends Component {
         });
     };
 
+    handleTextChange = (event) => {
+        console.log("TEXT CHANGE")
+        console.log(`classname: ${event.target.value}`)
+        this.setState({
+            classname: event.target.value,
+        });
+    }
+
+    onCheckBoxChange = (event) => {
+        console.log("CHECKBOX CHANGE");
+        console.log(`check: ${event.target.checked}`)
+        console.log("TES")
+        this.setState({
+            incldeSubclassCode: event.target.checked,
+        });
+    }
 
     updatePython = (newCode) => {
         console.log("TEST!")
@@ -36,31 +52,37 @@ export default class TextEditor extends Component {
         })
     }
 
-    onPythonEditorStateChange = (pythonEditorState) => {
-        this.setState({
-            pythonEditorState
-        })
-    }
-
     onButtonClick = (editorState) => {
         var xhr = new XMLHttpRequest();
         xhr.addEventListener('load', () => {
             console.log(xhr.responseText)
         });
-        xhr.open('POST', `https://2otbdflyea.execute-api.us-east-1.amazonaws.com/hello?text=${convertToRaw(editorState.getCurrentContext())}`);
+        var url = `https://2otbdflyea.execute-api.us-east-1.amazonaws.com/hello?text=${convertToRaw(editorState.getCurrentContext())}`
+        if (this.state.classname) {
+            url += `&class_name=${this.state.classname}`
+        }
+        if (this.state.includeSubclassCode) {
+            url += `&enable_subclass=${this.state.includeSubclassCode}`
+        }
+        xhr.open('POST', url);
         xhr.send();
     }
 
     render() {
-        const { editorState } = this.state;
-        // console.log(convertToRaw(editorState.getCurrentContent()));
+        const { editorState, classname, includeSubclassCode} = this.state;
         const onButtonClick = () => {
             var xhr = new XMLHttpRequest();
             xhr.addEventListener('load', () => {
                 this.updatePython(JSON.parse(xhr.responseText).text)
             });
-            console.log(convertToRaw(editorState.getCurrentContent()).blocks[0].text);
-            xhr.open('POST', `https://2otbdflyea.execute-api.us-east-1.amazonaws.com/hello?text=${convertToRaw(editorState.getCurrentContent()).blocks[0].text}`);
+            var url = `https://2otbdflyea.execute-api.us-east-1.amazonaws.com/hello?text=${convertToRaw(editorState.getCurrentContent()).blocks[0].text}`
+            if (classname !== "") {
+                url += `&class_name=${classname}`
+            }
+            if (includeSubclassCode) {
+                url += `&enable_subclass=${includeSubclassCode}`
+            }
+            xhr.open('POST', url);
             xhr.send();
             this.updatePython(xhr.responseText);
         }
@@ -68,29 +90,30 @@ export default class TextEditor extends Component {
             <div>
                 <div className="jsonEditorBox">
                     <button onClick={onButtonClick}>Submit!</button>
-                    <input type="text" value={this.state.classname}/>
-                    <input type="checkbox" name="includeSubclassCode" value={this.state.includeSubclassCode} />
-                <Editor
-                    editorState={editorState}
-                    toolbarClassName="jsonToolbar"
-                    wrapperClassName="jsonWrapper"
-                    editorClassName="jsonEditorClass"
-                    onEditorStateChange={this.onEditorStateChange}
-                />
+                    <input type="text" defaultValue="" onChange={this.handleTextChange}/>
+                    <input type="checkbox"  name="includeSubclassCode" onChange={this.onCheckBoxChange} />
+                    <span>Include Subclass Code</span>
+                    <Editor
+                        editorState={editorState}
+                        toolbarClassName="jsonToolbar"
+                        wrapperClassName="jsonWrapper"
+                        editorClassName="jsonEditorClass"
+                        onEditorStateChange={this.onEditorStateChange}
+                    />
                 </div>
                 <div>
                     <AceEditor
-                    mode="python"
-                    theme="github"
-                    name="pythonTextEditor"
-                    editorProps={{ $blockScrolling: true }}
-                    setOptions={{
-                        enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: true,
-                        enableSnippets: true,
-                        width: '900px'
-                    }}
-                    value={this.state.pythonCode}
+                        mode="python"
+                        theme="github"
+                        name="pythonTextEditor"
+                        editorProps={{ $blockScrolling: true }}
+                        setOptions={{
+                            enableBasicAutocompletion: true,
+                            enableLiveAutocompletion: true,
+                            enableSnippets: true,
+                            width: '900px'
+                        }}
+                        value={this.state.pythonCode}
                     />
                 </div>
 

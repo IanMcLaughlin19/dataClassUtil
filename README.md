@@ -209,6 +209,13 @@ You can then use the generated classes to write strongly typed code and use IDE 
 In practice this isn't fully functional and you need to hack around the limitations of Python a bit so that they instantiate
 properly, but the code generation is a start. 
 
+### Deployment instructions
+The backend of the app can be easily deployed with `sh deploy_lambda.sh` which will deploy an AWS SAM application that includes
+a Lambda function to generate the Python Code, an API Gateway to send/ receive requests, and an S3 bucket to distribute the front end code.
+
+To deploy the front end urn `npm build` then `aws s3 sync build/ s3://{$S3_BUCKET_NAME}` in order to update the front end code.
+The code will then be distributed an S3 Static Site. Working on including the whole thing as part of a code pipeline. 
+
 ### Version 2:
 * Going to add the subclass part to the tool so that it can actually be used properly
 * Going to put it behind a lambda function

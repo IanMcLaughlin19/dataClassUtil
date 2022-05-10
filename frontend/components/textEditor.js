@@ -25,6 +25,12 @@ export default class TextEditor extends Component {
         });
     };
 
+    handleTextChange = (classname) => {
+        console.log("TEXT CHANGE")
+        this.setState({
+            'classname': classname,
+        });
+    }
 
     updatePython = (newCode) => {
         console.log("TEST!")
@@ -47,13 +53,16 @@ export default class TextEditor extends Component {
         xhr.addEventListener('load', () => {
             console.log(xhr.responseText)
         });
-        xhr.open('POST', `https://2otbdflyea.execute-api.us-east-1.amazonaws.com/hello?text=${convertToRaw(editorState.getCurrentContext())}`);
+        var url = `https://2otbdflyea.execute-api.us-east-1.amazonaws.com/hello?text=${convertToRaw(editorState.getCurrentContext())}`
+        if (this.state.classname) {
+            url += `&class_name=${this.state.classname}`
+        }
+        xhr.open('POST', url);
         xhr.send();
     }
 
     render() {
-        const { editorState } = this.state;
-        // console.log(convertToRaw(editorState.getCurrentContent()));
+        const { editorState, classname } = this.state;
         const onButtonClick = () => {
             var xhr = new XMLHttpRequest();
             xhr.addEventListener('load', () => {
@@ -68,7 +77,7 @@ export default class TextEditor extends Component {
             <div>
                 <div className="jsonEditorBox">
                     <button onClick={onButtonClick}>Submit!</button>
-                    <input type="text" value={this.state.classname}/>
+                    <input type="text" defaultValue="" onChange={this.handleTextChange}/>
                     <input type="checkbox" name="includeSubclassCode" value={this.state.includeSubclassCode} />
                 <Editor
                     editorState={editorState}
